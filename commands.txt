@@ -5,3 +5,26 @@ git switch -c <branch name>
 git branch
 ## This will tell us in which branch we are on.
 ## git only loads the files which are on that branch.
+git init
+## this will initialize the working directory for the git and also creates the .git folder which will store the history, config etc.
+git status
+## this will tell on which we are on, files to track/commit etc.
+git add <filename>/.
+## this will add the files to staging area from working area. "." will add all the files from working area to staging area.
+git commit -m "message"
+## this will commit the files from staging area to repository with the commit message provided. "-m" is the flag for message.
+git diff
+## this will show the changes of the file in the working area vs last commit of the file.
+## this will be indicated by - and + symbols. "-" indicates deletion and "+" indicate addition
+## Undo the changes in three areas(working area, staging area and after commit)
+## working area
+git restore <file name>
+## this will remove the changes permanently.
+## staging area
+git restore --staged <file name>
+## this will unstage the file and the changes will be still present in the file. Now the file is in working area. You need to remove the changes from here.
+## after commit
+git commit --amend -m "message"
+## this will just replace the commit message
+git rm --cached <file name>
+## this will remove the file from tracking and keep it in the disk.
