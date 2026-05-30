@@ -340,3 +340,18 @@ grep -r "URL\|HOST\|ENDPOINT\|connection\|client" src/ | grep -i "env\|config"
 # 8. Logging?
 grep -r "log\|logger\|logging\|winston\|pino\|zerolog\|slog" src/ | head -5
 This investigation takes 10-15 minutes and gives you everything you need to write the Dockerfile, Docker Compose config, Kubernetes manifests, and monitoring setup.
+
+Build in different languages
+
+LANGUAGE        "BUILD" MEANS                 FINAL IMAGE NEEDS        
+────────        ─────────────                 ────────────────         
+Go              compile to machine code       nothing (just the binary)
+Rust            compile to machine code       nothing (just the binary)
+Java            compile to bytecode (.jar)    JRE (Java Runtime)       
+C# / .NET       compile to bytecode (.dll)    .NET Runtime             
+TypeScript      translate to JavaScript       Node.js runtime          
+Python          no build needed               Python runtime           
+JavaScript      no build needed               Node.js runtime          
+Ruby            no build needed               Ruby runtime             
+
+                ←── needs less at runtime          needs more at runtime ──→
