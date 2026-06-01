@@ -1,0 +1,83 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: cloudstore
+      POSTGRES_PASSWORD: secret123
+      POSTGRES_DB: orders
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cloudstore"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8002:8000"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
+    
+
+  product-catalog:
+    build:
+      context: ./src/catalog
+    ports:
+      - "8000:8000"
+    environment:
+      DYNAMODB_ENDPOINT: http://dynamodb-local:8000
+      DYNAMODB_TABLE: products
+      REDIS_URL: redis://redis:6379
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: dummy
+      AWS_SECRET_ACCESS_KEY: dummy
+      LOG_LEVEL: INFO
+    depends_on:
+      redis:
+        condition: service_healthy
+      dynamodb-local:
+        condition: service_started
+
+  order-service:
+    build:
+      context: ./src/orders
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: 8081
+      DATABASE_URL: postgres://cloudstore:secret123@postgres:5432/orders?sslmode=disable
+      PRODUCT_CATALOG_URL: http://product-catalog:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api-gateway:
+    build:
+      context: ./src/gateway
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      ORDER_SERVICE_URL: http://order-service:8081
+      PRODUCT_CATALOG_URL: http://product-catalog:8000
+      LOG_LEVEL: info
+    depends_on:
+      - order-service
+      - product-catalog
+
+volumes:
+  pg-data:
+  dynamodb-data:
