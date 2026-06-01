@@ -1,21 +1,59 @@
-# Cloudstore
-An E-commerce microservice platform. 
+# CloudStore
+
+A production-grade microservices e-commerce platform.
+
 ## Services
-- API Gateway (TypeScript/Fastify)
-- Order Service (Go/gRPC)
-- Product Catalog (Python/FastAPI)
-## Tech Stack
-AWS, Docker, Kubernetes, Terraform
 
-## Architecture
-Built with microservices running on AWS EKS.
-Follows GitOps methodology with Argo CD.
+| Service          | Language          | Port | Purpose                    |
+|------------------|-------------------|------|----------------------------|
+| API Gateway      | TypeScript/Fastify| 3000 | Entry point, routing       |
+| Order Service    | Go                | 8081 | Order management           |
+| Product Catalog  | Python/FastAPI    | 8000 | Product data + caching     |
 
-## Getting Started
-Run docker-compose up to start locally.
+## Infrastructure (local)
+
+| Component        | Purpose                          |
+|------------------|----------------------------------|
+| PostgreSQL       | Order storage (persistent)       |
+| Redis            | Product cache                    |
+| DynamoDB Local   | Product storage (in-memory)      |
+
+## Running Locally
+
+```bash
+docker compose up -d --build
+```
+
+Wait ~15 seconds for all services to start, then verify:
+
+```bash
+curl http://localhost:3000/health
+curl http://localhost:8081/health
+curl http://localhost:8000/health
+```
+
+## Example Usage
+
+```bash
+# Create a product
+curl -X POST http://localhost:8000/products \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Wireless Mouse", "price": 29.99, "category": "electronics"}'
+
+# Create an order
+curl -X POST http://localhost:3000/api/v1/orders \
+  -H "Content-Type: application/json" \
+  -d '{"productId": "PRODUCT_ID", "quantity": 2}'
+```
+
+## Notes
+
+- DynamoDB Local runs in-memory; product data resets on `docker compose down`
+- PostgreSQL data persists via a Docker volume
+- In production, these are replaced by AWS RDS and DynamoDB (see infra/terraform)
 
 
-The DevOps Checklist — 7 Questions for Every Service
+## The DevOps Checklist — 7 Questions for Every Service
 When a developer hands you a service, you need answers to these seven questions. If you can't find the answers by reading the code, you ask the developer.
 QUESTION 1: How does it START?
 QUESTION 2: How does it STOP?
