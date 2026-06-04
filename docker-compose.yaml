@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:16
     environment:
-      POSTGRES_USER: cloudstore
-      POSTGRES_PASSWORD: secret123
-      POSTGRES_DB: orders
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -58,7 +58,7 @@ services:
       - "8081:8081"
     environment:
       PORT: 8081
-      DATABASE_URL: postgres://cloudstore:secret123@postgres:5432/orders?sslmode=disable
+      DATABASE_URL: ${DATABASE_URL}
       PRODUCT_CATALOG_URL: http://product-catalog:8000
     depends_on:
       postgres:
