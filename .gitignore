@@ -28,3 +28,18 @@ Thumbs.db
 # Test coverage
 coverage/
 htmlcov/
+
+# ── Terraform ──
+# State files (contain secrets in plaintext — NEVER commit)
+*.tfstate
+*.tfstate.*
+# Working directory (downloaded providers/modules — large, machine-specific)
+.terraform/
+# Crash logs
+crash.log
+crash.*.log
+# Plan output files (may contain secrets)
+*.tfplan
+# Variable files that may contain secrets
+*.tfvars
+!*.example.tfvars
