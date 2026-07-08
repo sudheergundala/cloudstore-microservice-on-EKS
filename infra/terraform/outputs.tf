@@ -23,3 +23,23 @@ output "availability_zones" {
   description = "AZs used"
   value       = local.azs
 }
+
+output "alb_sg_id" {
+  description = "ALB security group ID"
+  value       = module.security_groups.alb_sg_id
+}
+
+output "eks_nodes_sg_id" {
+  description = "EKS nodes security group ID"
+  value       = module.security_groups.eks_nodes_sg_id
+}
+
+output "rds_sg_id" {
+  description = "RDS security group id"
+  value       = module.security_groups.rds_sg_id
+}
+
+output "elasticache_sg_id" {
+  description = "Elasticache security group id"
+  value       = module.security_groups.elasticache_sg_id
+}

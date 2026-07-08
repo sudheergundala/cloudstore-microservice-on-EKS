@@ -23,3 +23,19 @@ module "vpc" {
   availability_zones = local.azs
   tags               = local.common_tags
 }
+
+module "security_groups" {
+  source      = "./modules/security-groups"
+  vpc_id      = module.vpc.vpc_id
+  name_prefix = local.name_prefix
+  tags        = local.common_tags
+}
+
+module "vpc-endpoints" {
+  source                  = "./modules/vpc-endpoints"
+  private_route_table_ids = module.vpc.private_route_table_ids
+  vpc_id                  = module.vpc.vpc_id
+  name_prefix             = local.name_prefix
+  aws_region              = var.aws_region
+  tags                    = local.common_tags
+}
