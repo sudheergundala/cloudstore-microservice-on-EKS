@@ -43,3 +43,14 @@ output "elasticache_sg_id" {
   description = "Elasticache security group id"
   value       = module.security_groups.elasticache_sg_id
 }
+
+output "rds_endpoint" {
+  description = "RDS connection endpoint"
+  value       = module.rds.db_endpoint
+}
+
+output "rds_secret_arn" {
+  description = "Secrets Manager ARN for the DB password"
+  value       = module.rds.db_secret_arn
+  sensitive   = true
+}

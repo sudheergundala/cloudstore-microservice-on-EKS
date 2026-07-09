@@ -39,3 +39,13 @@ module "vpc-endpoints" {
   aws_region              = var.aws_region
   tags                    = local.common_tags
 }
+
+module "rds" {
+  source                = "./modules/rds"
+  rds_security_group_id = module.security_groups.rds_sg_id
+  private_subnet_ids    = module.vpc.private_subnet_ids
+  name_prefix           = local.name_prefix
+  db_name               = "orders"
+  multi_az              = false
+  tags                  = local.common_tags
+}
