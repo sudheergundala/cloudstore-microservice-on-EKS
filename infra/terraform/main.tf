@@ -49,3 +49,10 @@ module "rds" {
   multi_az              = false
   tags                  = local.common_tags
 }
+
+module "dynamodb" {
+  name_prefix    = local.name_prefix
+  source         = "./modules/dynamodb"
+  enable_streams = true
+  tags           = local.common_tags
+}

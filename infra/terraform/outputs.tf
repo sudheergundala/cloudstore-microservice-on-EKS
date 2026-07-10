@@ -54,3 +54,13 @@ output "rds_secret_arn" {
   value       = module.rds.db_secret_arn
   sensitive   = true
 }
+
+output "dynamodb_table_name" {
+  description = "Dynamodb products table name"
+  value       = module.dynamodb.table_name
+}
+
+output "dynamodb_stream_arn" {
+  description = "Dynamodb stream ARN"
+  value       = module.dynamodb.table_streams_arn
+}
