@@ -56,3 +56,13 @@ module "dynamodb" {
   enable_streams = true
   tags           = local.common_tags
 }
+
+module "elasticache" {
+  name_prefix                   = local.name_prefix
+  source                        = "./modules/elasticache"
+  elasticache_security_group_id = module.security_groups.elasticache_sg_id
+  private_subnet_ids            = module.vpc.private_subnet_ids
+  num_cache_cluster             = 2
+  multi_az                      = true
+  tags                          = local.common_tags
+}

@@ -64,3 +64,13 @@ output "dynamodb_stream_arn" {
   description = "Dynamodb stream ARN"
   value       = module.dynamodb.table_streams_arn
 }
+
+output "elasticache_primary_endpoint" {
+  description = "ElastiCache primary endpoint"
+  value       = module.elasticache.primary_endpoint
+}
+
+output "elasticache_reader_endpoint" {
+  description = "ElastiCache reader endpoint"
+  value       = module.elasticache.reader_endpoint
+}
