@@ -2,6 +2,8 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+data "aws_caller_identity" "current" {} # to get the current account details for unique S3 bucket creation.
+
 locals {
   name_prefix  = "cloudstore-${var.environment}"
   cluster_name = "cloudstore-${var.environment}"
@@ -65,4 +67,12 @@ module "elasticache" {
   num_cache_cluster             = 2
   multi_az                      = true
   tags                          = local.common_tags
+}
+
+module "s3" {
+  source        = "./modules/s3"
+  name_prefix   = local.name_prefix
+  account_id    = data.aws_caller_identity.current.account_id
+  force_destroy = true # true only for dev. Terraform generally dont allow to delete the non-empty buckets. For prod it should be false.
+  tags          = local.common_tags
 }

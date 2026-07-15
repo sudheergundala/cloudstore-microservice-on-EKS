@@ -74,3 +74,18 @@ output "elasticache_reader_endpoint" {
   description = "ElastiCache reader endpoint"
   value       = module.elasticache.reader_endpoint
 }
+
+output "s3_product_images_bucket" {
+  description = "Product images bucket"
+  value       = module.s3.product_images_bucket
+}
+
+output "s3_invoices_bucket" {
+  description = "Invoices bucket"
+  value       = module.s3.invoices_bucket
+}
+
+output "s3_logs_bucket" {
+  description = "Logs bucket"
+  value       = module.s3.logs_bucket
+}
